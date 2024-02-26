@@ -1478,11 +1478,13 @@ class HeadlessMonitor():
         isLocked = True
         while isLocked == True:
             try:
-                os.rename(event.src_path, event.src_path)             
-            except:                               
-                time.sleep(2)
+                with zipfile.ZipFile(event.src_path) as testfile:             
+                    print('File ' + event.src_path + ' is okay')            
+                
+            except zipfile.BadZipFile:  
+                time.sleep(2)                                          
+                print('File ' + event.src_path + ' is not okay. Download may not be finished. Waiting...')                  
             else:
-                isLocked = False
                 # if mode = 0 or 1 get link and metaData
                 mainFileDirectory = os.path.splitext(os.path.basename(event.src_path))[0]
                 mangaName = ''
